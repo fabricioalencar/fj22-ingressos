@@ -2,11 +2,21 @@ package br.com.caelum.ingresso.model;
 
 import java.time.LocalTime;
 
+import javax.persistence.GeneratedValue;
+
+
+
 public class Sessao {
 	
+	@id
+	@GeneratedValue
 	private Integer id;
 	private LocalTime horario;
+	
+	@ManytoOne
 	private Sala sala;
+	
+	@ManytoOne
 	private Filme filme;
 	
 	public Sessao(LocalTime horario, Filme filme, Sala sala){
