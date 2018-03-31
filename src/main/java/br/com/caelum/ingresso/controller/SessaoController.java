@@ -17,42 +17,16 @@ import br.com.caelum.ingresso.model.Sessao;
 import br.com.caelum.ingresso.model.form.SessaoForm;
 
 @Controller
-public class SessaoController {
-	
-	private static final String SalaDao = null;
-	@Autowired
-	private SessaoDao sessaoDao;
-	
-	@PostMapping(value = "/admin/sessao")
-	@Transactional
-	public ModelAndView salva(@Valid SessaoForm form, BindingResult result) {
-		
-		if (result.hasErrors()) return (ModelAndView) form(form.getSalaId(),form);
-		
-		Sessao sessao = form.toSessao(SalaDao, filmeDao);
-		
-		sessaoDao.save(sessao);
-		
-		return new ModelAndView("redirect:/admin/sala/" + form.getSalaId() + "/sessoes");
-	}
-
-
-	@Autowired
-	private SalaDao salaDao;
-	@Autowired
-	private FilmeDao filmeDao;
-	
-	@GetMapping("/admin/sessao")
-	public ModelAndView form(@RequestParam("salaId")Integer salaId, SessaoForm form){
-		form.setSalaId(salaId);
-		
-		ModelAndView modelAndView =new ModelAndView("sessao/sessao");
-		
-		modelAndView.addObject("sala", salaDao.findOne(salaId));
-		modelAndView.addObject("filme", filmeDao.findOne(salaId));
-		modelAndView.addObject("form", form);
-		
-		return (ModelAndView) modelAndView;
-	}
-
+public class SessaoController	{
+		@Autowired
+		private	SalaDao	salaDao;
+		@Autowired
+		private	FilmeDao	filmeDao;
+		@GetMapping("/admin/sessao")
+		public	ModelAndView	form(@RequestParam("salaId")	Integer	salaId)	{
+						ModelAndView	modelAndView	=	new	ModelAndView("sessao/sessao");
+						modelAndView.addObject("sala",	salaDao.findOne(salaId));
+						modelAndView.addObject("filmes",	filmeDao.findAll());
+						return	modelAndView;
+		}
 }
